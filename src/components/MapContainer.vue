@@ -1,9 +1,17 @@
 <template>
-  <div id="container" style="height: 700px" />
+  <div class="btn-container">
+    <button class="btn btn-success button" v-on:click="changeTilePaneStyle" >Change Color</button>
+  </div>
+  <div id="container" style="height: 700px" >
+  </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+onMounted(()=>{
+  const map = document.getElementsByClassName('leaflet-tile-pane')[0];
+  console.log(map)
+})
 
 import 'leaflet/dist/leaflet.css'
 import { Map, TileLayer, Marker, Control, LayerGroup, GeoJSON, DivIcon, Point, LatLng } from 'leaflet'
@@ -133,6 +141,17 @@ function reloadMarkers() {
   }
 }
 
+function changeTilePaneStyle() {
+  const tilePane = document.getElementsByClassName('leaflet-tile-pane')[0] as HTMLElement;
+  if(tilePane.style.filter === 'grayscale(0%)'){
+    tilePane.style.webkitFilter = 'grayscale(100%)';
+    tilePane.style.filter = 'grayscale(100%)';
+  }else {
+    tilePane.style.webkitFilter = 'grayscale(100%)';
+    tilePane.style.filter = 'grayscale(0%)';
+  }
+}
+
 onMounted(() => {
   setupMap()
   reloadMarkers()
@@ -140,6 +159,11 @@ onMounted(() => {
 </script>
 
 <style>
+.button{
+  width: 150px;
+  margin: auto;
+  margin-bottom: 1em;
+}
 .leaflet-div-icon {
   background-color: transparent;
   border: transparent;
@@ -174,4 +198,5 @@ onMounted(() => {
   -webkit-filter: grayscale(100%);
   filter: grayscale(100%);
 }
+
 </style>
