@@ -1,17 +1,13 @@
 <template>
   <div class="btn-container">
-    <button class="btn btn-success button" v-on:click="changeTilePaneStyle" >Change Color</button>
+    <button class="btn btn-success button" v-on:click="changeTilePaneStyle()" >Change Color</button>
   </div>
-  <div id="container" style="height: 700px" >
+  <div id="container" style="height: 700px" ref="mapContainerRef">
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-onMounted(()=>{
-  const map = document.getElementsByClassName('leaflet-tile-pane')[0];
-  console.log(map)
-})
 
 import 'leaflet/dist/leaflet.css'
 import { Map, TileLayer, Marker, Control, LayerGroup, GeoJSON, DivIcon, Point, LatLng } from 'leaflet'
@@ -20,6 +16,7 @@ const TILE_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 const ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
 
 const map = ref<Map | null>()
+const mapContainerRef = ref<null|HTMLElement>();
 
 interface placeDataType {
   id: string
@@ -141,14 +138,17 @@ function reloadMarkers() {
   }
 }
 
+function changeMapColor(percentageNum:number,element:HTMLElement){
+    element.style.filter = `grayscale(${percentageNum}%)`;
+    element.style.webkitFilter = `grayscale(${percentageNum}%)`;
+}
+
 function changeTilePaneStyle() {
-  const tilePane = document.getElementsByClassName('leaflet-tile-pane')[0] as HTMLElement;
-  if(tilePane.style.filter === 'grayscale(0%)'){
-    tilePane.style.webkitFilter = 'grayscale(100%)';
-    tilePane.style.filter = 'grayscale(100%)';
-  }else {
-    tilePane.style.webkitFilter = 'grayscale(100%)';
-    tilePane.style.filter = 'grayscale(0%)';
+  const element = mapContainerRef.value?.childNodes[0].childNodes[0] as HTMLElement;
+  if(element && ( element.style.filter === "grayscale(100%)" || element.style.filter === "" )){
+    changeMapColor(0,element);
+  }else{
+    changeMapColor(100,element);
   }
 }
 

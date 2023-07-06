@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "leaflet": "^1.9.4",
-    "vue": "^3.3.4"
+    "vue": "^3.2.36"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
